@@ -13,3 +13,7 @@ class BaseModel(ABC):
     @abstractmethod
     def save_model(self, model_path):
         ...
+
+    @abstractmethod
+    def predict(self, loaded_data):
+        ...

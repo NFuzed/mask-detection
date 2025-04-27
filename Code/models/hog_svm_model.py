@@ -21,7 +21,7 @@ class HogSvmModel(BaseModel):
         self.model = SVC(kernel='linear', C=1.0, random_state=42, gamma=0.1)
 
     def load_model(self, model_path):
-        return joblib.load(model_path)
+        self.model = joblib.load(model_path)
 
     def load_data(self, images_path, labels_path):
         """Extracts HOG features from images and labels files."""
@@ -53,6 +53,10 @@ class HogSvmModel(BaseModel):
     def save_model(self, path):
         joblib.dump(self.model, path)
 
+    def predict(self, loaded_data):
+        X_test, y_test = loaded_data
+        y_pred = self.model.predict(X_test)
+        return y_test, y_pred
 
 # Validation Accuracy: 0.8351
 # Accuracy: 0.8384

@@ -71,8 +71,8 @@ class SiftBovwSvmModel(BaseModel):
     def save_model(self, model_path):
         joblib.dump({'kmeans': self.kmeans, 'svm': self.svm}, model_path)
 
-    def predict(self, sift_descriptors):
-        _, image_desc_mapping, labels = sift_descriptors
+    def predict(self, loaded_data):
+        _, image_desc_mapping, labels = loaded_data
         X = self.create_histograms(image_desc_mapping)
         y_true = np.array(labels)
         y_pred = self.svm.predict(X)

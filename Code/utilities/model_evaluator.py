@@ -11,8 +11,8 @@ class ModelEvaluator:
         self.trained_model = model.load_model(model_path=model_path)
 
     def evaluate(self, images_path, labels_path):
-        X_test, y_test = self.model.load_data(images_path, labels_path)
-        y_pred = self.trained_model.predict(X_test)
+        loaded_data = self.model.load_data(images_path, labels_path)
+        y_test, y_pred = self.model.predict(loaded_data)
 
         acc = accuracy_score(y_test, y_pred)
         prec = precision_score(y_test, y_pred, average='weighted', zero_division=0)
