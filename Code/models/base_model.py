@@ -17,3 +17,7 @@ class BaseModel(ABC):
     @abstractmethod
     def predict(self, loaded_data):
         ...
+
+    @abstractmethod
+    def predict_single(self, image):
+        ...

@@ -64,3 +64,9 @@ class SimpleCNNModel(BaseModel):
         X, y = loaded_data  # loaded_data is (X, y) tuple
         y_pred = np.argmax(self.model.predict(X), axis=1)
         return y, y_pred
+
+    def predict_single(self, image):
+        image = image.reshape((1, *image.shape))  # add batch dimension
+        probs = self.model.predict(image)
+        return np.argmax(probs, axis=1)[0]
+

@@ -13,6 +13,8 @@ class PathRetrievers:
 
         self.path_to_export_trained_models = os.path.join(root_dir_path, 'Models')
 
+        self.path_to_personal_dataset_images = os.path.join(root_dir_path, 'Personal_Dataset', 'images')
+
 
 if __name__ == '__main__':
     path_retriever = PathRetrievers()

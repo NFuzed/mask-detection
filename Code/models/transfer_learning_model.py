@@ -102,7 +102,7 @@ class TransferLearningModel(BaseModel):
         self.base_model.trainable = True
         for layer in self.base_model.layers[:-20]:  # Keep first layers frozen
             layer.trainable = False
-        self.model.compile(optimizer=Adam(1e-4), loss='sparse_categorical_crossentropy', metrics=['accuracy'])
+        self.model.compile(optimizer=Adam(0.0001), loss='sparse_categorical_crossentropy', metrics=['accuracy'])
 
     def save_model(self, model_path):
         self.model.save(model_path)
@@ -114,3 +114,9 @@ class TransferLearningModel(BaseModel):
         X, y = loaded_data
         y_pred = np.argmax(self.model.predict(X), axis=1)
         return y, y_pred
+
+    def predict_single(self, image):
+        # image = preprocess_input(image)
+        image = image.reshape((1, *image.shape))  # add batch dimension
+        probs = self.model.predict(image)
+        return np.argmax(probs, axis=1)[0]

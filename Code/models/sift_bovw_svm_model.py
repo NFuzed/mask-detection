@@ -77,3 +77,31 @@ class SiftBovwSvmModel(BaseModel):
         y_true = np.array(labels)
         y_pred = self.svm.predict(X)
         return y_true, y_pred
+
+    def predict_single(self, image):
+        if image is None or image.size == 0:
+            raise ValueError("Image not loaded correctly!")
+
+        if image.ndim == 3:
+            if image.dtype != np.uint8:
+                image = (image * 255).astype(np.uint8)
+            image = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
+        else:
+            if image.dtype != np.uint8:
+                image = (image * 255).astype(np.uint8)
+
+        _, descriptors = self.sift.detectAndCompute(image, None)
+
+        if descriptors is None:
+            return self.majority_class
+
+        words = self.kmeans.predict(descriptors)
+
+        histogram = np.zeros(self.kmeans.n_clusters)
+        for word in words:
+            histogram[word] += 1
+        histogram /= np.linalg.norm(histogram)  # Normalize the histogram
+
+        # Use SVM to predict
+        prediction = self.svm.predict([histogram])[0]
+        return prediction

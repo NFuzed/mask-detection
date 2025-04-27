@@ -58,6 +58,15 @@ class HogSvmModel(BaseModel):
         y_pred = self.model.predict(X_test)
         return y_test, y_pred
 
+    def predict_single(self, image):
+        image = image[..., 0]
+
+        features = hog(image, orientations=self.orientations,
+                       pixels_per_cell=self.pixels_per_cell,
+                       cells_per_block=self.cells_per_block,
+                       block_norm='L2-Hys')
+        return self.model.predict([features])[0]
+
 # Validation Accuracy: 0.8351
 # Accuracy: 0.8384
 # Precision: 0.8335
