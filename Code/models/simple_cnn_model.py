@@ -4,6 +4,8 @@ import tensorflow as tf
 from tensorflow.keras.models import Sequential, load_model
 from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout
 from tensorflow.keras.optimizers import Adam
+from tensorflow.keras import Input
+
 from skimage.io import imread
 from skimage.transform import resize
 
@@ -33,7 +35,8 @@ class SimpleCNNModel(BaseModel):
 
     def build_model(self):
         model = Sequential([
-            Conv2D(32, (3, 3), activation='relu', input_shape=(self.img_size[0], self.img_size[1], 3)),
+            Input(shape=(self.img_size[0], self.img_size[1], 3)),
+            Conv2D(32, (3, 3), activation='relu'),
             MaxPooling2D((2, 2)),
             Conv2D(64, (3, 3), activation='relu'),
             MaxPooling2D((2, 2)),
@@ -42,7 +45,8 @@ class SimpleCNNModel(BaseModel):
             Dropout(0.5),
             Dense(self.num_classes, activation='softmax')
         ])
-        model.compile(optimizer=Adam(learning_rate=1e-3), loss='sparse_categorical_crossentropy', metrics=['accuracy'])
+
+        model.compile(optimizer=Adam(learning_rate=0.001), loss='sparse_categorical_crossentropy', metrics=['accuracy'])
         self.model = model
 
     def train(self, X_train, y_train, epochs=10, batch_size=32, validation_split=0.2):
